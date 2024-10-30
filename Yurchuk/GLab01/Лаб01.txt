@@ -1,0 +1,48 @@
+def generate_magic_square(n):
+    magic_square = [[0] * n for _ in range(n)]
+
+    num = 1
+    i, j = 0, n // 2
+
+    while num <= n * n:
+        magic_square[i][j] = num
+        num += 1
+        newi, newj = (i - 1) % n, (j + 1) % n
+        if magic_square[newi][newj]:
+            i += 1
+        else:
+            i, j = newi, newj
+
+    return magic_square
+
+# Генерируем магический квадрат 5 на 5
+n = 5
+magic_square = generate_magic_square(n)
+
+# Выводим магический квадрат
+#for row in magic_square:
+#    print(row)
+
+order = [num for row in magic_square for num in row]
+print(order)
+
+def permutation_cipher(message, order):
+    # Удаляем пробелы и приводим к нижнему регистру
+    message = message.replace(" ", "").lower()
+  # Убедимся, что длина сообщения соответствует длине порядка
+    if len(message) != len(order):
+        raise ValueError("Длина сообщения должна соответствовать длине порядка перестановки.")
+
+    # Создаем зашифрованное сообщение
+    encrypted_message = [''] * len(order)
+
+    for i, pos in enumerate(order):
+        encrypted_message[pos - 1] = message[i]  # pos - 1 для индексации с 0
+
+    return ''.join(encrypted_message)
+
+# Исходное сообщение
+message = "IgotoleardIgotoleard12345"
+# Зашифровываем сообщение
+encrypted = permutation_cipher(message, order)
+print("Зашифрованное сообщение:", encrypted)

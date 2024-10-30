@@ -1,0 +1,25 @@
+def create_cipher_table(slogan):
+    # Удаляем дубликаты и приводим к нижнему регистру
+    unique_letters = []
+    for char in slogan:
+        if char not in unique_letters and char.isalpha():
+            unique_letters.append(char)
+
+    # Русский алфавит
+    russian_alphabet = 'абвгдежзийклмнопрстуфхцчшщъыьэюя'
+
+    # Получаем оставшиеся буквы алфавита
+    remaining_letters = [char for char in russian_alphabet if char not in unique_letters]
+
+    # Формируем таблицу
+    cipher_table = unique_letters + remaining_letters
+    return cipher_table
+
+# Лозунг
+slogan = "заявление"
+
+# Создаем таблицу шифрования
+cipher_table = create_cipher_table(slogan)
+
+# Выводим таблицу
+print("Таблица шифрования:", cipher_table)
