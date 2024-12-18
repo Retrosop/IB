@@ -1,0 +1,2 @@
+Hello, please contact us at info@example.com or support@example.com.
+For inquiries, write to sales@example.com or info@example.com.
