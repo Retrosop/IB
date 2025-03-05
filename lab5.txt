@@ -1,0 +1,52 @@
+import random
+
+# Функция для вычисления возведения в степень по модулю
+def modular_exponentiation(base, exp, mod):
+    result = 1
+    while exp > 0:
+        if exp % 2 == 1:  # Если степень нечетная
+            result = (result * base) % mod
+        base = (base * base) % mod
+        exp //= 2
+    return result
+
+# Генерация ключей
+def generate_keys(p, g):
+    x = random.randint(1, p - 2)  # Секретный ключ
+    y = modular_exponentiation(g, x, p)  # Открытый ключ
+    return x, y
+
+# Шифрование
+def encrypt(p, g, y, M):
+    k = random.randint(1, p - 2)  # Случайное число
+    C1 = modular_exponentiation(g, k, p)
+    C2 = (M * modular_exponentiation(y, k, p)) % p
+    return C1, C2
+
+# Расшифрование
+def decrypt(p, x, C1, C2):
+    S = modular_exponentiation(C1, x, p)  # Вычисление общего секрета
+    S_inv = pow(S, -1, p)  # Обратное значение S по модулю p
+    M = (C2 * S_inv) % p
+    return
+if __name__ == "__main__":
+    # Параметры системы
+    p = 467  # Простое число
+    g = 2    # Примитивный корень
+
+    # Генерация ключей
+    x, y = generate_keys(p, g)
+    print(f"Секретный ключ (x): {x}")
+    print(f"Открытый ключ (y): {y}")
+
+    # Сообщение для шифрования
+    M = 123
+    print(f"Исходное сообщение (M): {M}")
+
+    # Шифрование
+    C1, C2 = encrypt(p, g, y, M)
+    print(f"Шифртекст (C1, C2): ({C1}, {C2})")
+
+    # Расшифрование
+    decrypted_message = decrypt(p, x, C1, C2)
+    print(f"Расшифрованное сообщение: {decrypted_message}")

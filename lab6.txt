@@ -1,0 +1,28 @@
+pip install pycryptodome
+     ****
+
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from Crypto.Random import get_random_bytes
+
+def encrypt_string(key, plaintext):
+    cipher = AES.new(key, AES.MODE_CBC)
+    iv = cipher.iv
+    ciphertext = cipher.encrypt(pad(plaintext.encode(), AES.block_size))
+    return ciphertext, iv
+
+def decrypt_string(key, ciphertext, iv):
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+    plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
+    return plaintext.decode()
+
+# Пример использования
+if __name__ == "__main__":
+    plaintext = "Это пример строки"
+    key = get_random_bytes(16)  # Генерация случайного ключа
+    ciphertext, iv = encrypt_string(key, plaintext)
+    decrypted_text = decrypt_string(key, ciphertext, iv)
+
+    print(f"Исходная строка: {plaintext}")
+    print(f"Зашифрованная строка: {ciphertext.hex()}")
+    print(f"Расшифрованная строка: {decrypted_text}")

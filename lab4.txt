@@ -1,0 +1,27 @@
+def additive_generator(seed1, seed2, m):
+    """
+    Генератор бесконечной последовательности псевдослучайных чисел на основе аддитивного метода.
+
+    :param seed1: первое начальное значение
+    :param seed2: второе начальное значение
+    :param m: модуль
+    :yield: следующее значение последовательности
+    """
+    prev1, prev2 = seed1, seed2
+    while True:
+        next_value = (prev1 + prev2) % m
+        yield next_value
+        prev1, prev2 = prev2, next_value
+
+# Параметры генератора
+seed1 = 1  # Первое начальное значение
+seed2 = 1  # Второе начальное значение
+m = 100    # Модуль (ограничение диапазона)
+
+# Создаем генератор
+generator = additive_generator(seed1, seed2, m)
+
+# Пример использования: вывод первых 20 ключей
+print("Первые 20 ключей:")
+for _ in range(20):
+    print(next(generator), end=" ")
