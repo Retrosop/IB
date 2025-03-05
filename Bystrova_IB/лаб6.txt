@@ -1,0 +1,21 @@
+import secrets
+
+def generate_secret_key(p):
+    """
+    Генерирует секретный ключ A, который меньше P.
+    
+    :param p: Верхняя граница (P).
+    :return: Секретный ключ A.
+    """
+    if p <= 1:
+        raise ValueError("P должно быть больше 1.")
+    
+    # Генерируем случайное число A, такое что 0 <= A < P
+    secret_key = secrets.randbelow(p)
+    return secret_key
+
+# Пример использования
+if __name__ == "__main__":
+    P = 4096  # Установите значение P
+    A = generate_secret_key(P)
+    print(f"Секретный ключ A: {A}")

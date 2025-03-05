@@ -1,0 +1,54 @@
+def create_substitution_table(keyword):
+    """
+    Создает таблицу замены на основе ключевого слова.
+    :param keyword: Ключевое слово для шифрования.
+    :return: Словарь с заменами букв.
+    """
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    keyword = ''.join(sorted(set(keyword), key=keyword.index)).upper()  # Убираем дубликаты и приводим к верхнему регистру
+    substitution = keyword + ''.join([char for char in alphabet if char not in keyword])
+    return {alphabet[i]: substitution[i] for i in range(len(alphabet))}
+
+def encrypt(text, keyword):
+    """
+    Шифрует текст с использованием лозунгового шифра.
+    :param text: Исходный текст для шифрования.
+    :param keyword: Ключевое слово для шифрования.
+    :return: Зашифрованный текст.
+    """
+    substitution_table = create_substitution_table(keyword)
+    encrypted_text = ''.join(substitution_table.get(char.upper(), char) for char in text)
+    return encrypted_text
+
+def decrypt(encrypted_text, keyword):
+    """
+    Дешифрует текст с использованием лозунгового шифра.
+    :param encrypted_text: Зашифрованный текст.
+    :param keyword: Ключевое слово для дешифрования.
+    :return: Расшифрованный текст.
+    """
+    substitution_table = create_substitution_table(keyword)
+    reverse_table = {v: k for k, v in substitution_table.items()}  # Создаем обратную таблицу
+    decrypted_text = ''.join(reverse_table.get(char.upper(), char) for char in encrypted_text)
+    return decrypted_text
+
+def main():
+    """
+    Основная функция для взаимодействия с пользователем.
+    """
+    print("Лозунговый шифр")
+    mode = input("Введите режим (encrypt/decrypt): ").strip().lower()
+    text = input("Введите текст: ").strip()
+    keyword = input("Введите ключевое слово: ").strip()
+
+    if mode == "encrypt":
+        encrypted_text = encrypt(text, keyword)
+        print("Зашифрованный текст:", encrypted_text)
+    elif mode == "decrypt":
+        decrypted_text = decrypt(text, keyword)
+        print("Расшифрованный текст:", decrypted_text)
+    else:
+        print("Неверный режим. Используйте 'encrypt' или 'decrypt'.")
+
+if __name__ == "__main__":
+    main()

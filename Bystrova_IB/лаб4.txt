@@ -1,0 +1,47 @@
+def create_key_sequence(key_sequence):
+    """
+    Создает таблицу замены на основе последовательности ключей.
+    :param key_sequence: Список из 5 элементов, представляющий ключ.
+    :return: Словарь для замены символов.
+    """
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    key_sequence = key_sequence.upper()  # Приводим ключ к верхнему регистру
+    substitution_table = {}
+
+    # Создаем таблицу замены
+    for i, char in enumerate(alphabet):
+        substitution_table[char] = key_sequence[i % len(key_sequence)]
+
+    return substitution_table
+
+
+def encode_text(text, key_sequence):
+    """
+    Кодирует текст с использованием последовательности ключей.
+    :param text: Исходный текст для кодирования.
+    :param key_sequence: Список из 5 элементов, представляющий ключ.
+    :return: Закодированный текст.
+    """
+    substitution_table = create_key_sequence(key_sequence)
+    encoded_text = ''.join(substitution_table.get(char.upper(), char) for char in text)
+    return encoded_text
+
+
+def main():
+    """
+    Основная функция для взаимодействия с пользователем.
+    """
+    print("Кодер с последовательностью ключей")
+    text = input("Введите текст для кодирования: ").strip()
+    key_sequence = input("Введите последовательность ключей (5 символов): ").strip()
+
+    if len(key_sequence) != 5:
+        print("Ошибка: последовательность ключей должна содержать ровно 5 символов.")
+        return
+
+    encoded_text = encode_text(text, key_sequence)
+    print("Закодированный текст:", encoded_text)
+
+
+if __name__ == "__main__":
+    main()

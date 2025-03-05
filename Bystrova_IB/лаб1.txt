@@ -1,0 +1,71 @@
+import math
+
+def scytale_encrypt(text, columns):
+    """
+    Шифрование текста с использованием шифра "Сцитала".
+    :param text: Исходный текст для шифрования.
+    :param columns: Количество столбцов в таблице.
+    :return: Зашифрованный текст.
+    """
+    text = text.replace(" ", "").upper()  # Убираем пробелы и приводим текст к верхнему регистру
+    rows = math.ceil(len(text) / columns)  # Вычисляем количество строк
+    grid = [''] * rows  # Создаем таблицу (список строк)
+
+    # Заполняем таблицу по строкам
+    for i, char in enumerate(text):
+        grid[i // columns] += char
+
+    # Считываем таблицу по столбцам
+    encrypted_text = ''
+    for col in range(columns):
+        for row in grid:
+            if col < len(row):
+                encrypted_text += row[col]
+
+    return encrypted_text
+
+
+def scytale_decrypt(encrypted_text, columns):
+    """
+    Дешифрование текста с использованием шифра "Сцитала".
+    :param encrypted_text: Зашифрованный текст.
+    :param columns: Количество столбцов в таблице.
+    :return: Расшифрованный текст.
+    """
+    rows = math.ceil(len(encrypted_text) / columns)  # Вычисляем количество строк
+    grid = [''] * rows  # Создаем таблицу (список строк)
+    index = 0
+
+    # Заполняем таблицу по столбцам
+    for col in range(columns):
+        for row in range(rows):
+            if index < len(encrypted_text):
+                grid[row] += encrypted_text[index]
+                index += 1
+
+    # Считываем таблицу по строкам
+    decrypted_text = ''.join(grid)
+    return decrypted_text
+
+
+def main():
+    """
+    Основная процедура для взаимодействия с пользователем.
+    """
+    print("Шифр 'Сцитала'")
+    mode = input("Введите режим (encrypt/decrypt): ").strip().lower()
+    text = input("Введите текст: ").strip()
+    columns = int(input("Введите количество столбцов: "))
+
+    if mode == "encrypt":
+        encrypted_text = scytale_encrypt(text, columns)
+        print("Зашифрованный текст:", encrypted_text)
+    elif mode == "decrypt":
+        decrypted_text = scytale_decrypt(text, columns)
+        print("Расшифрованный текст:", decrypted_text)
+    else:
+        print("Неверный режим. Используйте 'encrypt' или 'decrypt'.")
+
+
+if __name__ == "__main__":
+    main()
