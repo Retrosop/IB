@@ -1,0 +1,65 @@
+import math
+
+# Функция для шифрования текста с использованием сциталы
+def encrypt_scytale(text, columns):
+    # Убираем пробелы и приводим текст к верхнему регистру
+    text = text.replace(" ", "").upper()
+
+    # Определяем количество строк
+    rows = math.ceil(len(text) / columns)
+
+    # Заполняем таблицу по строкам
+    table = [[" " for _ in range(columns)] for _ in range(rows)]
+    index = 0
+
+    for i in range(rows):
+        for j in range(columns):
+            if index < len(text):
+                table[i][j] = text[index]
+                index += 1
+
+    # Считываем текст по столбцам
+    encrypted_text = ""
+    for j in range(columns):
+        for i in range(rows):
+            encrypted_text += table[i][j]
+
+    return encrypted_text
+
+
+# Функция для дешифрования текста с использованием сциталы
+def decrypt_scytale(encrypted_text, columns):
+    # Определяем количество строк
+    rows = math.ceil(len(encrypted_text) / columns)
+
+    # Заполняем таблицу по столбцам
+    table = [[" " for _ in range(columns)] for _ in range(rows)]
+    index = 0
+
+    for j in range(columns):
+        for i in range(rows):
+            if index < len(encrypted_text):
+                table[i][j] = encrypted_text[index]
+                index += 1
+
+    # Считываем текст по строкам
+    decrypted_text = ""
+    for i in range(rows):
+        for j in range(columns):
+            decrypted_text += table[i][j]
+
+    return decrypted_text.strip()
+
+
+# Пример использования
+if __name__ == "__main__":
+    original_text = "СЦИТАЛАЭТОДРЕВНИЙШИФР"
+    columns = 5
+
+    print("Оригинальный текст:", original_text)
+
+    encrypted = encrypt_scytale(original_text, columns)
+    print("Зашифрованный текст:", encrypted)
+
+    decrypted = decrypt_scytale(encrypted, columns)
+    print("Расшифрованный текст:", decrypted)

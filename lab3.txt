@@ -1,0 +1,27 @@
+def multiplicative_generator(a, m, Y0, n):
+    """
+    Генерация последовательности псевдослучайных чисел с использованием мультипликативного метода.
+
+    :param a: множитель
+    :param m: модуль
+    :param Y0: начальное значение (seed)
+    :param n: количество чисел в последовательности
+    :return: список псевдослучайных чисел
+    """
+    sequence = [Y0]
+    for _ in range(n - 1):
+        next_value = (a * sequence[-1]) % m
+        sequence.append(next_value)
+    return sequence
+
+# Параметры
+a = 7
+m = 4096
+Y0 = 502
+n = 10  # Количество чисел в последовательности
+
+# Генерация последовательности
+random_sequence = multiplicative_generator(a, m, Y0, n)
+
+# Вывод результата
+print("Сгенерированная последовательность:", random_sequence)
