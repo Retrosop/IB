@@ -1,0 +1,26 @@
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from Crypto.Random import get_random_bytes
+def encrypt_string(key, plaintext):
+    cipher = AES.new(key, AES.MODE_CBC)
+    iv = cipher.iv
+    ciphertext = cipher.encrypt(pad(plaintext.encode(), AES.block_size))
+    return iv + ciphertext  # Возвращаем IV и зашифрованный текст вместе
+
+def decrypt_string(key, combined_data):
+    iv = combined_data[:16]  # Первые 16 байтов — это IV
+    ciphertext = combined_data[16:]  # Остальное — зашифрованный текст
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+    plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
+    return plaintext.decode()
+
+# Пример использования
+if __name__ == "__main__":
+    plaintext = "Это пример строки"
+    key = get_random_bytes(16)  # Генерация случайного ключа
+    encrypted_data = encrypt_string(key, plaintext)
+    decrypted_text = decrypt_string(key, encrypted_data)
+
+    print(f"Исходная строка: {plaintext}")
+    print(f"Зашифрованная строка (hex): {encrypted_data.hex()}")
+    print(f"Расшифрованная строка: {decrypted_text}")
