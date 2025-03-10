@@ -1,0 +1,22 @@
+import random
+import string
+
+def generate_key_sequence(length=17):
+    """Генерирует случайную последовательность ключей заданной длины."""
+    characters = string.ascii_letters + string.digits  # Используем буквы и цифры
+    return ''.join(random.choice(characters) for _ in range(length))
+
+def encode_keys(key_sequence):
+    """Кодирует последовательность ключей в формате base64."""
+    import base64
+    key_bytes = key_sequence.encode('utf-8')  # Преобразуем строку в байты
+    encoded_bytes = base64.b64encode(key_bytes)  # Кодируем в base64
+    return encoded_bytes.decode('utf-8')  # Преобразуем обратно в строку
+
+# Генерация последовательности ключей
+key_sequence = generate_key_sequence()
+print(f"Сгенерированная последовательность ключей: {key_sequence}")
+
+# Кодирование последовательности ключей
+encoded_sequence = encode_keys(key_sequence)
+print(f"Закодированная последовательность ключей (base64): {encoded_sequence}")
