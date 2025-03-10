@@ -31,7 +31,7 @@ var
   Cipher: TDoubleSquareCipher;
   PlainText, EncryptedText, DecryptedText: string;
 begin
-  Cipher := TDoubleSquareCipher.Create('KEYWORDONE', 'KEYWORDTWO');
+  Cipher := TDoubleSquareCipher.Create('KEYONE', 'KEYTWO');
   try
     PlainText := 'MIRPRIVET';
     EncryptedText := Cipher.Encrypt(PlainText);
