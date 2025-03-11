@@ -1,0 +1,69 @@
+def coding(c, key):
+    """Encode a character using the key."""
+    return chr((ord(c) + sum(ord(k) for k in key)) % 65536)  # Use a larger range for Unicode
+
+def decoding(c, key):
+    """Decode a character using the key."""
+    return chr((ord(c) - sum(ord(k) for k in key)) % 65536)  # Use a larger range for Unicode
+
+def add_password(key, f_out):
+    """Add the encoded password to the beginning of the file."""
+    encoded_password = ''.join(coding(char, key) for char in key)
+    f_out.write(encoded_password)
+
+def check_password(key, f_in):
+    """Check if the provided password matches the encoded password in the file."""
+    encoded_password = ''
+    for char in key:
+        encoded_char = f_in.read(1)
+        if not encoded_char:
+            break
+        encoded_password += decoding(encoded_char, key)
+    
+    return encoded_password == key
+
+# Create the text.dat file with sample content
+with open('text.dat', 'w', encoding='utf-8') as f:
+    f.write("This is a sample text for encoding.")
+
+# Main program
+def main():
+    # Input password for encryption
+    key = input('Введите пароль для шифрования: ')
+    
+    # Input message to encrypt
+    message = input('Введите сообщение для шифрования: ')
+    
+    # Open files for reading and writing
+    with open('text.dat', 'r', encoding='utf-8') as f_in, open('coding.dat', 'w', encoding='utf-8') as f_out:
+        add_password(key, f_out)  # Add encoded password to the file
+        for c in f_in.read():
+            f_out.write(coding(c, key))
+        # Encrypt and write the message to the file
+        for c in message:
+            f_out.write(coding(c, key))
+    
+    # Input password for decryption
+    key = input('Введите пароль для дешифрования: ')
+    
+    with open('coding.dat', 'r', encoding='utf-8') as f_in:
+        if check_password(key, f_in):
+            with open('decoding.dat', 'w', encoding='utf-8') as f_out:
+                f_in.seek(0)  # Reset file pointer to the beginning
+                # Read and decode the text
+                decoded_text = ''
+                while True:
+                    c = f_in.read(1)
+                    if not c:
+                        break
+                    decoded_text += decoding(c, key)
+                # Display the decrypted message
+                print('Расшифрованное сообщение:', decoded_text[len(key):])  # Skip the password part
+                f_out.write(decoded_text)
+            print('OK')
+        else:
+            print('Пароли не совпадают. Файл не дешифрован')
+
+# Run the main program
+if __name__ == "__main__":
+    main()
