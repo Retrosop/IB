@@ -1,0 +1,40 @@
+function toBinaryArray(str) {
+    const binaryArray = [];
+    for (let i = 0; i < str.length; i++) {
+        const binaryString = str.charCodeAt(i).toString(2).padStart(8, '0');
+        for (let j = 0; j < binaryString.length; j++) {
+            binaryArray.push(parseInt(binaryString[j], 10));
+        }
+    }
+    return binaryArray;
+}
+
+function fromBinaryArray(binaryArray) {
+    let str = '';
+    for (let i = 0; i < binaryArray.length; i += 8) {
+        const byte = binaryArray.slice(i, i + 8).join('');
+        str += String.fromCharCode(parseInt(byte, 2));
+    }
+    return str;
+}
+
+function vernamCipher(text, key) {
+    const binaryText = toBinaryArray(text);
+    const binaryKey = toBinaryArray(key);
+    const keyLength = binaryKey.length;
+
+    for (let i = 0, j = 0; i < binaryText.length; i++, j = (j + 1) % keyLength) {
+        binaryText[i] ^= binaryKey[j]; // Применение операции XOR
+    }
+
+    return fromBinaryArray(binaryText);
+}
+
+// Пример использования
+const text = "Hello, World!";
+const key = "ABCDE"; // Ключ из 5 элементов
+const encryptedText = vernamCipher(text, key);
+console.log("Зашифрованный текст:", encryptedText);
+
+const decryptedText = vernamCipher(encryptedText, key);
+console.log("Восстановленный текст:", decryptedText);

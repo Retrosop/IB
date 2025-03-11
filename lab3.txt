@@ -1,0 +1,39 @@
+const m = 4096; // Максимальное значение
+let Y0 = 4003; // Начальное значение
+let Y1 = 59;   // Шаг
+
+// Функция для генерации гаммы
+function generateGamma(length) {
+    const gamma = [];
+    for (let i = 0; i < length; i++) {
+        Y0 = (Y0 + Y1) % m; // Обновляем Y0
+        gamma.push(Y0); // Добавляем в гамму
+    }
+    return gamma;
+}
+
+// Функция для шифрования
+function encrypt(plaintext) {
+    const gamma = generateGamma(plaintext.length);
+    const ciphertext = [];
+
+    for (let i = 0; i < plaintext.length; i++) {
+        // Шифруем с помощью XOR
+        ciphertext.push(plaintext[i] ^ gamma[i]);
+    }
+    return ciphertext;
+}
+
+// Пример использования
+const plaintext = [1, 2, 3, 4, 5]; // Пример открытого текста
+const ciphertext = encrypt(plaintext);
+
+console.log("Шифртекст:", ciphertext);
+
+// Шифрование
+const encryptedText = cipher.encrypt(inputText);
+console.log('Зашифрованный текст:', encryptedText);
+
+// Дешифрование
+const decryptedText = cipher.decrypt(encryptedText);
+console.log('Расшифрованный текст:', decryptedText);

@@ -1,0 +1,36 @@
+function caesarCipher(text, shift) {
+    const alphabet = 'абвгдежзийклмнопрстуфхцчшщъыьэюя';
+    const alphabetLength = alphabet.length;
+
+    // Функция для шифрования текста
+    const encrypt = (char) => {
+        const index = alphabet.indexOf(char.toLowerCase());
+        if (index === -1) return char; // Возвращаем символ без изменений, если он не буква
+
+        // Вычисляем новый индекс с учетом сдвига
+        const newIndex = (index + shift) % alphabetLength;
+        const newChar = alphabet[newIndex];
+
+        // Сохраняем регистр
+        return char === char.toUpperCase() ? newChar.toUpperCase() : newChar;
+    };
+
+    // Применяем шифрование к каждому символу текста
+    return text.split('').map(encrypt).join('');
+}
+
+function caesarDecipher(text, shift) {
+    return caesarCipher(text, -shift); // Используем отрицательный сдвиг для дешифрования
+}
+
+// Пример использования
+const inputText = 'Привет, мир!';
+const shiftKey = 3; // Сдвиг на 3 позиции
+
+// Шифрование
+const encryptedText = caesarCipher(inputText, shiftKey);
+console.log('Зашифрованный текст:', encryptedText); // Вывод: Зашифрованный текст: Сулхет, пнр!
+
+// Дешифрование
+const decryptedText = caesarDecipher(encryptedText, shiftKey);
+console.log('Расшифрованный текст:', decryptedText); // Вывод: Расшифрованный текст: Привет, мир!

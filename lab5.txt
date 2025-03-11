@@ -1,0 +1,30 @@
+function mod(a, b) {
+    return ((a % b) + b) % b; // Функция для корректного вычисления модуля
+}
+
+function elGamalEncrypt(M, P, G, K) {
+    const Y1 = mod(Math.pow(G, K), P); // Y1 = G^K mod P
+    const Y2 = mod((M + Y1) % P, P); // Y2 = (Yk mod P) ⊕ M
+    return [Y1, Y2]; // Возвращаем шифртекст (Y1, Y2)
+}
+
+function elGamalDecrypt(Y1, Y2, A, P) {
+    const Y1A = mod(Math.pow(Y1, A), P); // Y1^A mod P
+    const M = mod(Y2 - Y1A, P); // M = Y2 ⊕ (Y1^A mod P)
+    return M;
+}
+
+// Параметры
+const P = 11; // Простое число
+const G = 9;  // Генератор
+const K = 3;  // Случайное число
+const A = 7;  // Закрытый ключ
+const M = 5;  // Сообщение
+
+// Шифрование
+const [Y1, Y2] = elGamalEncrypt(M, P, G, K);
+console.log(`Шифртекст: (Y1: ${Y1}, Y2: ${Y2})`);
+
+// Дешифрование
+const decryptedMessage = elGamalDecrypt(Y1, Y2, A, P);
+console.log(`Восстановленное сообщение: ${decryptedMessage}`);

@@ -1,0 +1,20 @@
+function shuffleGroup(str) {
+    // Функция для перемешивания символов в строке
+    const shuffle = (group) => {
+        return group.split('').sort(() => Math.random() - 0.5).join('');
+    };
+
+    // Разбиваем строку на группы по 4 символа
+    const groups = str.match(/.{1,4}/g);
+    
+    // Перемешиваем каждую группу
+    const shuffledGroups = groups.map(group => shuffle(group));
+    
+    // Объединяем перемешанные группы обратно в строку
+    return shuffledGroups.join('');
+}
+
+// Пример использования
+const inputString = 'делфисемь';
+const result = shuffleGroup(inputString);
+console.log(result);
