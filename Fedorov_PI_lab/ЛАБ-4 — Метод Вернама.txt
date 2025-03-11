@@ -1,0 +1,25 @@
+import random
+
+def generate_key(length):
+    """Генерирует случайный ключ заданной длины."""
+    return [random.randint(0, 255) for _ in range(length)]
+
+def vernam_cipher(message, key):
+    """Шифрует или расшифровывает сообщение с помощью шифра Вернама."""
+    return ''.join(chr(ord(m) ^ k) for m, k in zip(message, key))
+
+# Пример использования
+message = "Hello"
+key_length = len(message)
+
+# Генерация ключа
+key = generate_key(key_length)
+print(f"Сгенерированный ключ: {key}")
+
+# Шифрование сообщения
+encrypted_message = vernam_cipher(message, key)
+print(f"Зашифрованное сообщение: {encrypted_message}")
+
+# Расшифровка сообщения
+decrypted_message = vernam_cipher(encrypted_message, key)
+print(f"Расшифрованное сообщение: {decrypted_message}")

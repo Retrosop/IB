@@ -1,0 +1,50 @@
+import random
+
+def mod_exp(base, exp, mod):
+    """Возводит base в степень exp по модулю mod."""
+    return pow(base, exp, mod)
+
+def generate_keys(p, g, a):
+    """Генерирует открытый и закрытый ключи."""
+    # Закрытый ключ
+    private_key = a
+    # Открытый ключ
+    y = mod_exp(g, private_key, p)
+    return private_key, y
+
+def encrypt(p, g, y, message):
+    """Шифрует сообщение с помощью открытого ключа."""
+    # Генерируем случайное число k
+    k = random.randint(1, p-2)
+    # Вычисляем c1 и c2
+    c1 = mod_exp(g, k, p)
+    c2 = (message * mod_exp(y, k, p)) % p
+    return c1, c2
+
+def decrypt(p, private_key, c1, c2):
+    """Дешифрует сообщение с помощью закрытого ключа."""
+    # Вычисляем s
+    s = mod_exp(c1, private_key, p)
+    # Находим обратный элемент s по модулю p
+    s_inv = pow(s, -1, p)
+    # Дешифруем сообщение
+    message = (c2 * s_inv) % p
+    return message
+
+# Параметры
+p = 7
+g = 6
+a = 5
+
+# Генерация ключей
+private_key, y = generate_keys(p, g, a)
+print(f"Закрытый ключ: {private_key}, Открытый ключ: {y}")
+
+# Шифрование сообщения (например, 3)
+message = 3
+c1, c2 = encrypt(p, g, y, message)
+print(f"Зашифрованное сообщение: c1 = {c1}, c2 = {c2}")
+
+# Дешифрование сообщения
+decrypted_message = decrypt(p, private_key, c1, c2)
+print(f"Расшифрованное сообщение: {decrypted_message}")
