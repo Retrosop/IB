@@ -6,45 +6,37 @@ def mod_exp(base, exp, mod):
 
 def generate_keys(p, g, a):
     """Генерирует открытый и закрытый ключи."""
-    # Закрытый ключ
     private_key = a
-    # Открытый ключ
     y = mod_exp(g, private_key, p)
     return private_key, y
 
-def encrypt(p, g, y, message):
+def encrypt(p, g, y, message, k):
     """Шифрует сообщение с помощью открытого ключа."""
-    # Генерируем случайное число k
-    k = random.randint(1, p-2)
-    # Вычисляем c1 и c2
-    c1 = mod_exp(g, k, p)
-    c2 = (message * mod_exp(y, k, p)) % p
-    return c1, c2
+    Y1 = mod_exp(g, k, p)
+    Y2 = (mod_exp(y, k, p) ^ message)  # Используем XOR для шифрования
+    return Y1, Y2
 
-def decrypt(p, private_key, c1, c2):
+def decrypt(Y1, Y2, private_key, p):
     """Дешифрует сообщение с помощью закрытого ключа."""
-    # Вычисляем s
-    s = mod_exp(c1, private_key, p)
-    # Находим обратный элемент s по модулю p
-    s_inv = pow(s, -1, p)
-    # Дешифруем сообщение
-    message = (c2 * s_inv) % p
+    s = mod_exp(Y1, private_key, p)
+    message = Y2 ^ s  # Используем XOR для расшифровки
     return message
 
 # Параметры
-p = 7
-g = 6
-a = 5
+P = 11  # Модуль
+G = 8   # Генератор
+A = 3   # Секретный ключ
 
 # Генерация ключей
-private_key, y = generate_keys(p, g, a)
-print(f"Закрытый ключ: {private_key}, Открытый ключ: {y}")
+private_key, Y = generate_keys(P, G, A)
+print(f"Закрытый ключ: {private_key}, Открытый ключ: {Y}")
 
-# Шифрование сообщения (например, 3)
-message = 3
-c1, c2 = encrypt(p, g, y, message)
-print(f"Зашифрованное сообщение: c1 = {c1}, c2 = {c2}")
+# Шифрование сообщения
+M = 5  # Сообщение
+K = 9  # Случайное число
+Y1, Y2 = encrypt(P, G, Y, M, K)
+print(f"Зашифрованное сообщение: (Y1, Y2) = ({Y1}, {Y2})")
 
 # Дешифрование сообщения
-decrypted_message = decrypt(p, private_key, c1, c2)
+decrypted_message = decrypt(Y1, Y2, private_key, P)
 print(f"Расшифрованное сообщение: {decrypted_message}")
